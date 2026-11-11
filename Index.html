@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal de Offboarding TI</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    body { font-family: 'Inter', sans-serif; }
+    .glass-card {
+      background: rgba(30, 41, 59, 0.7);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen p-4 md:p-8">
+
+  <div class="max-w-7xl mx-auto space-y-6">
+
+    <!-- HEADER EXECUTIVO -->
+    <header class="glass-card rounded-2xl p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+      <div class="flex items-center gap-4">
+        <div class="w-12 h-12 rounded-xl bg-blue-600/20 border border-blue-500/30 flex items-center justify-center text-blue-400">
+          <i class="fa-solid fa-user-slash text-xl"></i>
+        </div>
+        <div>
+          <h1 class="text-xl font-bold tracking-tight text-white flex items-center gap-3">
+            PORTAL DE OFFBOARDING TI
+            <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20">OFFBOARDING TI</span>
+          </h1>
+          <p class="text-xs text-slate-400 mt-0.5">Gestão de Desligamentos Corporativos</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-3 text-xs">
+        <span class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-medium">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          Workspace Admin API Conectada
+        </span>
+      </div>
+    </header>
+
+    <!-- FORMULÁRIO DE OFFBOARDING -->
+    <div class="glass-card rounded-2xl p-6">
+      <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+        <h2 class="text-base font-semibold text-white flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+          Novo Processamento de Offboarding
+        </h2>
+        <span class="text-xs text-slate-400">Preencha os dados para executar as rotinas</span>
+      </div>
+
+      <form id="offboardingForm" onsubmit="processarOffboarding(event)" class="mt-6 space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div>
+            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Nome Completo do Colaborador *</label>
+            <div class="relative">
+              <i class="fa-solid fa-user absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-xs"></i>
+              <input type="text" id="nomeColaborador" required placeholder="Ex: Nome do Colaborador" 
+                class="w-full bg-slate-900/80 border border-slate-700/80 rounded-xl py-3 pl-10 pr-4 text-sm text-white focus:outline-none focus:border-blue-500">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">E-mail Corporativo *</label>
+            <div class="relative">
+              <i class="fa-solid fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-xs"></i>
+              <input type="email" id="emailColaborador" required placeholder="usuario@empresa.com.br" 
+                class="w-full bg-slate-900/80 border border-slate-700/80 rounded-xl py-3 pl-10 pr-4 text-sm text-white focus:outline-none focus:border-blue-500">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Motivo do Desligamento</label>
+            <div class="relative">
+              <i class="fa-solid fa-briefcase absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-xs"></i>
+              <select id="motivoDesligamento" class="w-full bg-slate-900/80 border border-slate-700/80 rounded-xl py-3 pl-10 pr-4 text-sm text-white focus:outline-none focus:border-blue-500 appearance-none">
+                <option value="Sem Justa Causa">Desligamento Sem Justa Causa</option>
+                <option value="Com Justa Causa">Desligamento Com Justa Causa</option>
+                <option value="Pedido de Demissão">Pedido de Demissão</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex flex-col md:flex-row justify-between items-center gap-4 pt-4 border-t border-slate-800">
+          <p class="text-xs text-slate-400 flex items-center gap-2">
+            <i class="fa-solid fa-circle-info text-blue-400"></i>
+            Ações automáticas: Grupos, Keepit, UO Desativados + Marcação Pendente para AD.
+          </p>
+          <button type="submit" id="btnSubmit" class="w-full md:w-auto px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold shadow-lg shadow-blue-600/30 flex items-center justify-center gap-2 transition active:scale-95">
+            <i class="fa-solid fa-bolt"></i>
+            <span>EXECUTAR OFFBOARDING</span>
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- TABELA DE HISTÓRICO -->
+    <div class="glass-card rounded-2xl p-6">
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pb-4 border-b border-slate-800">
+        <div>
+          <h2 class="text-base font-semibold text-white">Fila de Processamento & Histórico</h2>
+          <p class="text-xs text-slate-400 mt-0.5">Clique nos botões <b>Pendente</b> para alternar para <b>SIM</b> em tempo real no Google Sheets.</p>
+        </div>
+        <button onclick="buscarHistorico()" class="text-xs text-blue-400 hover:text-blue-300 flex items-center gap-1 font-medium">
+          <i class="fa-solid fa-rotate-right"></i> Atualizar Tabela
+        </button>
+      </div>
+
+      <div class="overflow-x-auto mt-4">
+        <table class="w-full text-left text-xs">
+          <thead>
+            <tr class="text-slate-400 uppercase tracking-wider font-semibold border-b border-slate-800">
+              <th class="py-3 px-4">Colaborador</th>
+              <th class="py-3 px-4">E-mail</th>
+              <th class="py-3 px-4">Grupos Workspace</th>
+              <th class="py-3 px-4">Keepit (Backup)</th>
+              <th class="py-3 px-4">Suspensão UO</th>
+              <th class="py-3 px-4">Desativação AD</th>
+              <th class="py-3 px-4">Licença (24h)</th>
+            </tr>
+          </thead>
+          <tbody id="tabelaHistorico" class="divide-y divide-slate-800/50 text-slate-300">
+            <tr>
+              <td colspan="7" class="text-center py-6 text-slate-500">
+                <i class="fa-solid fa-spinner animate-spin mr-2"></i> Carregando registros da planilha...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', buscarHistorico);
+
+    function buscarHistorico() {
+      google.script.run
+        .withSuccessHandler(renderizarTabela)
+        .carregarHistoricoPlanilha();
+    }
+
+    function renderizarTabela(lista) {
+      const tbody = document.getElementById('tabelaHistorico');
+      tbody.innerHTML = '';
+
+      if (!lista || lista.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" class="text-center py-6 text-slate-500">Nenhum registro encontrado na planilha.</td></tr>';
+        return;
+      }
+
+      lista.forEach(item => {
+        const iniciais = item.nome ? item.nome.split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase() : 'TI';
+        
+        const isSimAD = (String(item.statusAD).trim().toUpperCase() === 'SIM');
+        const badgeAD = `
+          <button onclick="alternarStatus(${item.linhaPlanilha}, 'AD', '${isSimAD ? 'Pendente' : 'SIM'}')" 
+                  class="px-2.5 py-1 rounded-md transition font-medium text-[10px] flex items-center gap-1 cursor-pointer ${isSimAD ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/20' : 'bg-amber-500/10 text-amber-400 border border-amber-500/20 hover:bg-amber-500/20'}">
+            <i class="fa-solid ${isSimAD ? 'fa-check' : 'fa-clock'}"></i>
+            ${isSimAD ? 'SIM' : 'Pendente'}
+          </button>`;
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="py-3 px-4 font-medium text-white flex items-center gap-2">
+            <span class="w-7 h-7 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-[10px] font-bold text-blue-400">${iniciais}</span>
+            ${item.nome}
+          </td>
+          <td class="py-3 px-4 font-mono text-slate-400">${item.email}</td>
+          <td class="py-3 px-4"><span class="px-2 py-1 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px]"><i class="fa-solid fa-check"></i> Removido(a)</span></td>
+          <td class="py-3 px-4"><span class="px-2 py-1 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px]"><i class="fa-solid fa-check"></i> SIM</span></td>
+          <td class="py-3 px-4"><span class="px-2 py-1 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px]"><i class="fa-solid fa-check"></i> Movido / Suspenso</span></td>
+          <td class="py-3 px-4">${badgeAD}</td>
+          <td class="py-3 px-4"><span class="px-2 py-1 rounded-md bg-amber-500/10 text-amber-400 border border-amber-500/20 text-[10px]"><i class="fa-solid fa-clock"></i> Agendado (24h)</span></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function alternarStatus(linhaPlanilha, tipo, novoStatus) {
+      google.script.run
+        .withSuccessHandler(function(res) {
+          if (res.sucesso) {
+            buscarHistorico();
+          } else {
+            alert("Erro ao alterar na planilha: " + res.mensagem);
+          }
+        })
+        .atualizarStatusManualWeb(linhaPlanilha, tipo, novoStatus);
+    }
+
+    function processarOffboarding(e) {
+      e.preventDefault();
+      const nome = document.getElementById('nomeColaborador').value;
+      const email = document.getElementById('emailColaborador').value;
+      const btn = document.getElementById('btnSubmit');
+
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i> <span>PROCESSANDO...</span>';
+
+      google.script.run
+        .withSuccessHandler(function(res) {
+          btn.disabled = false;
+          btn.innerHTML = '<i class="fa-solid fa-bolt"></i> <span>EXECUTAR OFFBOARDING</span>';
+
+          if (res.sucesso) {
+            document.getElementById('offboardingForm').reset();
+            buscarHistorico();
+            alert(res.mensagem);
+          } else {
+            alert("Erro: " + res.mensagem);
+          }
+        })
+        .executarOffboardingWeb(nome, email);
+    }
+  </script>
+</body>
+</html>
